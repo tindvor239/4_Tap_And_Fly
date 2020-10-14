@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &5285433105573332097
+--- !u!1 &3952933084980044433
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,8 +8,9 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 6530542109543607923}
-  - component: {fileID: 4775360760183473226}
+  - component: {fileID: 1259252997961581700}
+  - component: {fileID: 649731680405358801}
+  - component: {fileID: 7178724463169895893}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -17,13 +18,13 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &6530542109543607923
+--- !u!4 &1259252997961581700
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5285433105573332097}
+  m_GameObject: {fileID: 3952933084980044433}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -31,15 +32,60 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4775360760183473226
+--- !u!114 &649731680405358801
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5285433105573332097}
+  m_GameObject: {fileID: 3952933084980044433}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bd451356aa800e7499eb243a2cbf1017, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  farAwayObjects:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  landObjects:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  followingObject: {fileID: 0}
+  xOffset: 4.5
+--- !u!114 &7178724463169895893
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3952933084980044433}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 30868dbfa29a22341a805d02013d04f9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spawnObstacles: []
+  backgrounds: []
+  background: {fileID: 0}
+  tutorial: {fileID: 0}
+  gameOver: {fileID: 0}
+  onPlaying: {fileID: 0}
+  gameMenu: {fileID: 0}
+  medal: {fileID: 0}
+  currentScore: {fileID: 0}
+  newScore: {fileID: 0}
+  newHighScore: {fileID: 0}
+  newScoreImage: {fileID: 0}
+  noobMedal: {fileID: 0}
+  averageMedal: {fileID: 0}
+  superiorMedal: {fileID: 0}
+  mainCanvas: {fileID: 0}
+  gameScene: {fileID: 0}
+  isOutSide: 0
+  startPosition: {x: 0, y: 0, z: 0}
+  player: {fileID: 0}
+  gameState: 3
+  score: 0

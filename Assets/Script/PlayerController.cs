@@ -4,144 +4,101 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField] float force = 3.0f;
-    [SerializeField] float flySpeed = 2f;
-
-    [SerializeField] AudioClip flySound;
-    [SerializeField] AudioClip deathSound;
-    [SerializeField] AudioClip scoreSound;
-
-    [SerializeField] GameObject hitEffect;
-
-    [SerializeField] float rotateSmooth = 5f;
-    Quaternion downRotation = Quaternion.Euler(0, 0, -60);
-    Quaternion forwardRotaion = Quaternion.Euler(0, 0, 45);
-
-    AudioSource audioSource;
+    [SerializeField] float pressDelayTime;
+    float currentPressDelayTime;
 
     int lastScore = 0;
-    int currentScore = 1;
+    sbyte dieCount = 0;
 
-    float balanceForce;
-    float balanceMass;
-
-    float delayTime = 0.0f;
-    float clickDelaySpeed = 1.5f;
-
-    int deadCount = 0;
-
+    VolantAnimal bird;
     GameManager gameManager;
-    Animator playerAnimator;
-
+    #region Properties
+    public VolantAnimal Bird
+    {
+        get { return bird; }
+    }
+    #endregion
+    [System.Obsolete]
     // Start is called before the first frame update
     void Start()
     {
-        gameManager = GameManager.instance;
-        playerAnimator = GetComponent<Animator>();
-        audioSource = GetComponent<AudioSource>();
-        currentScore = gameManager.score;
-        balanceMass = force;
+        gameManager = GameManager.Instance;
+        bird = VolantAnimal.Instance;
+        bird.HitEffect.enableEmission = false;
     }
 
     // Update is called once per frame
+    [System.Obsolete]
     void Update()
     {
-        //print("current score: " + currentScore);
-        //print("last score: " + lastScore);
-        switch (gameManager.gameState)
+        switch (gameManager.State)
         {
-            case GameManager.GameState.OnPlaying:
-                hitEffect.SetActive(false);
-                deadCount = 0;
-                MoveForward();
+            case GameManager.GameState.Play:
+                dieCount = 0;
+                bird.MoveForward();
                 Score();
-                if (gameManager.isOutSide == false)
-                {
-                    Fly();
-                }
+                PressToFly();
+                bird.HitEffect.enableEmission = true;
                 break;
-            case GameManager.GameState.GetReady:
-                hitEffect.SetActive(false);
-                flySpeed = 2f;
-                MoveForward();
-                if (gameManager.isOutSide == false)
-                {
-                    Fly();
-                }
+            case GameManager.GameState.Ready:
+                bird.BalanceForce = 0;
+                bird.transform.rotation = Quaternion.Euler(0, 0, 5);
+                bird.MoveForward();
+                PressToFly();
                 break;
             case GameManager.GameState.GameOver:
-                OnBeingHit();
+                if (dieCount <= 0)
+                {
+                    bird.BeingHit();
+                    StartCoroutine(bird.StopParticle());
+                    dieCount++;
+                }
                 break;
             default:
-                hitEffect.SetActive(false);
-                MoveForward();
+                bird.MoveForward();
                 break;
         }
     }
 
-    void Fly()
+    void PressToFly()
     {
-        delayTime -= Time.deltaTime;
-
-        if (delayTime <= 0f)
+        currentPressDelayTime -= Time.deltaTime;
+        if (currentPressDelayTime <= 0f)
         {
-            OnPress();
+            if (Input.GetMouseButtonDown(0))
+            {
+                bird.ResetBalanceForce();
+                bird.Transform.rotation = bird.ForwardRotation;
+                bird.Animator.SetTrigger("Flap");
+                currentPressDelayTime = pressDelayTime;
+                bird.AudioSource.PlayOneShot(bird.FlySound);
+            }
         }
-        transform.position += Vector3.up * balanceForce * Time.deltaTime;
-        BalanceForce();
-        transform.rotation = Quaternion.Lerp(transform.rotation, downRotation, rotateSmooth * Time.deltaTime);
-    }
-
-    void OnPress()
-    {
-        if (Input.GetMouseButtonDown(0))
-        {
-            AddForce();
-            transform.rotation = forwardRotaion;
-            playerAnimator.SetTrigger("Flap");
-            delayTime = 1f / clickDelaySpeed;
-            audioSource.PlayOneShot(flySound);
-        }
+        bird.Fly();
     }
 
     void Score()
     {
-        currentScore = gameManager.score;
-        if (currentScore > lastScore)
+        if (bird.Score > lastScore)
         {
-            audioSource.PlayOneShot(scoreSound);
-            flySpeed += 0.1f;
-            lastScore = currentScore;
+            bird.Scoring();
+            lastScore = bird.Score;
         }
     }
 
-    void MoveForward()
+    private void OnCollisionEnter2D(Collision2D collision)
     {
-        transform.position += Vector3.right * flySpeed * Time.deltaTime;
-    }
-
-    void AddForce()
-    {
-        balanceForce = force;
-    }
-    void BalanceForce()
-    {
-        balanceForce -= balanceMass * Time.deltaTime;
-        if (balanceForce <= 0)
+        if(collision.gameObject.tag == "Land")
         {
-            balanceForce = 0;
+            bird.Alive = false;
+            bird.HitEffect.Play();
         }
     }
-
-    void OnBeingHit()
+    private void OnCollisionExit2D(Collision2D collision)
     {
-        if (deadCount <= 0)
+        if (collision.gameObject.tag == "Land")
         {
-            transform.rotation = Quaternion.Euler(0, 0, 0);
-            audioSource.PlayOneShot(deathSound);
-            playerAnimator.SetTrigger("Die");
-            hitEffect.SetActive(true);
-            deadCount++;
+            bird.Alive = true;
         }
     }
 }

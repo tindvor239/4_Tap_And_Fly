@@ -11,17 +11,17 @@ public class PhysicBody : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        gameManager = GameManager.instance;
+        gameManager = GameManager.Instance;
     }
 
     // Update is called once per frame
     void Update()
     {
-        switch (gameManager.gameState)
+        switch (gameManager.State)
         {
-            case GameManager.GameState.GetReady:
+            case GameManager.GameState.Ready:
                 break;
-            case GameManager.GameState.GameMenu:
+            case GameManager.GameState.Pause:
                 break;
             case GameManager.GameState.GameOver:
                 break;

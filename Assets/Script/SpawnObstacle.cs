@@ -4,34 +4,35 @@ using UnityEngine;
 
 public class SpawnObstacle : MonoBehaviour
 {
-    public GameObject[] obstacles;
-    public bool isSpawning;
-    public int randomObstacleIndex;
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField] GameObject[] obstacles;
+    [SerializeField] GameObject obstacleStorage;
+    private bool isSpawning;
+    private sbyte randomObstacleIndex;
+    public bool IsSpawning
     {
-        
+        get { return isSpawning; }
+        set { isSpawning = value; }
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        if (obstacles != null)
+        Spawn();
+    }
+
+    void GetRandomeIndex()
+    {
+        randomObstacleIndex = (sbyte)Random.Range(0, obstacles.Length - 1);
+    }
+    void Spawn()
+    {
+        if(isSpawning)
         {
-            if (isSpawning == true)
-            {
-                Spawn();
-            }
+            GetRandomeIndex();
+            GameObject newObstacle;
+            newObstacle = Instantiate(obstacles[randomObstacleIndex]);
+            newObstacle.transform.position = transform.position;
+            newObstacle.transform.parent = obstacleStorage.transform;
+            isSpawning = false;
         }
-    }
-
-    public void Spawn()
-    {
-        GameObject newObstacle;
-        newObstacle = Instantiate(obstacles[randomObstacleIndex]);
-        print(gameObject.name);
-        print(randomObstacleIndex);
-        newObstacle.transform.position = transform.position;
-        isSpawning = false;
     }
 }

@@ -1,51 +1,31 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Obstacle : MonoBehaviour
 {
+    Transform player;
     GameManager gameManager;
-    GameObject player;
-    Camera mainCamera;
-
-    bool isScore = false;
+    bool canAddScore = false;
     // Start is called before the first frame update
     void Start()
     {
-        gameManager = GameManager.instance;
-        player = gameManager.player;
-        mainCamera = Camera.main;
+        gameManager = GameManager.Instance;
+        player = gameManager.Player.transform;
     }
 
     // Update is called once per frame
     void Update()
     {
-        AddScore();
-    }
-
-    void AddScore()
-    {
-        if (isScore == false)
+        if(player.position.x >= transform.position.x)
         {
-            if (transform.position.x <= player.transform.position.x)
+            if(canAddScore == false)
             {
-                gameManager.score++;
-                isScore = true;
+                player.GetComponent<PlayerController>().Bird.Score += 1;
+                canAddScore = true;
             }
         }
-
-        switch (gameManager.gameState)
+        if(Vector3.Distance(transform.position, player.position) >= 10 && transform.position.x < player.position.x)
         {
-            case GameManager.GameState.GetReady:
-                DestroyImmediate(gameObject);
-                break;
-            case GameManager.GameState.OnPlaying:
-                Vector2 viewPosition = mainCamera.WorldToScreenPoint(gameObject.transform.position);
-                if (viewPosition.x < -0.1f)
-                {
-                    DestroyImmediate(gameObject);
-                }
-                break;
+            Destroy(gameObject);
         }
     }
 }

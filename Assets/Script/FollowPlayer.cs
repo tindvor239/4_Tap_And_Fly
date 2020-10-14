@@ -11,8 +11,8 @@ public class FollowPlayer : MonoBehaviour
     public float xOffset;
     void Start()
     {
-        gameManager = GameManager.instance;
-        player = gameManager.player;
+        gameManager = GameManager.Instance;
+        player = gameManager.Player;
         xOffset = transform.position.x - player.transform.position.x;
     }
 
@@ -24,7 +24,7 @@ public class FollowPlayer : MonoBehaviour
 
     void Following()
     {
-        switch (gameManager.gameState)
+        switch (gameManager.State)
         {
             case GameManager.GameState.GameOver:
                 break;
