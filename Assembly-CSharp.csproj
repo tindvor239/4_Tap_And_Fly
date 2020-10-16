@@ -63,6 +63,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Script\Collider\BoxColliderInspector.cs" />
+    <Compile Include="Assets\Script\Collider\CustomBoxCollider.cs" />
+    <Compile Include="Assets\Script\Collider\CustomCollider.cs" />
     <Compile Include="Assets\Script\FollowPlayer.cs" />
     <Compile Include="Assets\Script\GameManager.cs" />
     <Compile Include="Assets\Script\GameOverUI.cs" />
