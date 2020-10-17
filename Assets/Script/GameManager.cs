@@ -3,14 +3,15 @@
 [RequireComponent(typeof(Paralax))]
 public class GameManager : MonoBehaviour
 {
+    [SerializeField] GameObject player;
     [SerializeField] Spawner spawner;
     [SerializeField] Vector3 startPosition;
-    Camera mainCamera;
-
-    [SerializeField] GameObject player;
+    
+    private ushort score;
+    private ushort lastScore = 0;
+    private Camera mainCamera;
     public enum GameState { GameOver, Ready, Play, Pause };
     private GameState state;
-    public int score = 0;
     Paralax paralax;
     #region Singleton
     public static GameManager Instance;
@@ -28,6 +29,10 @@ public class GameManager : MonoBehaviour
     public GameState State
     {
         get { return state; }
+    }
+    public ushort Score
+    {
+        get => score;
     }
     #endregion
     // Start is called before the first frame update
@@ -57,20 +62,40 @@ public class GameManager : MonoBehaviour
                 }
                 break;
             case GameState.Play:
-                if(player != null)
+                if (player != null)
                 {
                     spawner.Spawn();
-                    if(player.GetComponent<PlayerController>().Bird.Alive == false)
+                    if (player.GetComponent<PlayerController>().Bird.IsAlive == false)
                         state = GameState.GameOver;
                 }
                 break;
+            case GameState.GameOver:
+                SetLastScore();
+
+                break;
         }
+    }
+
+    private void SetLastScore()
+    {
+        if (score > lastScore)
+        {
+            lastScore = score;
+        }
+    }
+
+    public void AddScore(ushort plusValue)
+    {
+        score += plusValue;
     }
     #region Button Behaviors
     public void LoadPlayMap()
     {
         state = GameState.Ready;
         player.transform.position = startPosition;
+        PlayerController controller = player.GetComponent<PlayerController>();
+        controller.Bird.Alive();
+        controller.Bird.ResetSpeed();
         spawner.DeleteAllObstacles();
     }
     public void LoadMainMenu()

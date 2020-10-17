@@ -6,8 +6,6 @@ public class PlayerController : MonoBehaviour
 {
     [SerializeField] float pressDelayTime;
     float currentPressDelayTime;
-
-    int lastScore = 0;
     sbyte dieCount = 0;
 
     VolantAnimal bird;
@@ -36,7 +34,6 @@ public class PlayerController : MonoBehaviour
             case GameManager.GameState.Play:
                 dieCount = 0;
                 bird.MoveForward();
-                Score();
                 PressToFly();
                 bird.HitEffect.enableEmission = true;
                 break;
@@ -47,6 +44,7 @@ public class PlayerController : MonoBehaviour
                 PressToFly();
                 break;
             case GameManager.GameState.GameOver:
+                // not to make die sound playing repeatedly
                 if (dieCount <= 0)
                 {
                     bird.BeingHit();
@@ -75,30 +73,5 @@ public class PlayerController : MonoBehaviour
             }
         }
         bird.Fly();
-    }
-
-    void Score()
-    {
-        if (bird.Score > lastScore)
-        {
-            bird.Scoring();
-            lastScore = bird.Score;
-        }
-    }
-
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if(collision.gameObject.tag == "Land")
-        {
-            bird.Alive = false;
-            bird.HitEffect.Play();
-        }
-    }
-    private void OnCollisionExit2D(Collision2D collision)
-    {
-        if (collision.gameObject.tag == "Land")
-        {
-            bird.Alive = true;
-        }
     }
 }

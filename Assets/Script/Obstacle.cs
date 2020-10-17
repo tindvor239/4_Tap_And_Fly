@@ -1,31 +1,26 @@
 ﻿using UnityEngine;
 
+[RequireComponent(typeof(CustomCollider))]
 public class Obstacle : MonoBehaviour
 {
-    Transform player;
-    GameManager gameManager;
-    bool canAddScore = false;
+    [SerializeField] new CustomCollider collider;
+    [SerializeField] protected Transform player;
+    [SerializeField] protected GameManager gameManager;
     // Start is called before the first frame update
-    void Start()
+    protected virtual void Start()
     {
         gameManager = GameManager.Instance;
         player = gameManager.Player.transform;
+        collider = GetComponent<CustomCollider>();
+        collider.Target = player.gameObject.GetComponent<CustomCollider>();
     }
 
     // Update is called once per frame
-    void Update()
+    protected virtual void Update()
     {
-        if(player.position.x >= transform.position.x)
+        if(collider.IsCollide())
         {
-            if(canAddScore == false)
-            {
-                player.GetComponent<PlayerController>().Bird.Score += 1;
-                canAddScore = true;
-            }
-        }
-        if(Vector3.Distance(transform.position, player.position) >= 10 && transform.position.x < player.position.x)
-        {
-            Destroy(gameObject);
+            player.GetComponent<PlayerController>().Bird.Die();
         }
     }
 }

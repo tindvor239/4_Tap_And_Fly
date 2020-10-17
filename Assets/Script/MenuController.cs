@@ -24,14 +24,14 @@ public class MenuController : MonoBehaviour
             {
                 case GameManager.GameState.GameOver:
                     menu.ShowGameOverMenu();
-                    menu.GameOver.ShowGameOverUI(gameManager.Player.GetComponent<PlayerController>().Bird.Score);
+                    menu.GameOver.ShowGameOverUI(gameManager.Score);
                     break;
                 case GameManager.GameState.Ready:
                     menu.ShowTutorial();
                     break;
                 case GameManager.GameState.Play:
                     menu.ShowScore();
-                    menu.SetScore(gameManager.Player.GetComponent<PlayerController>().Bird.Score);
+                    menu.SetScore(gameManager.Score);
                     break;
                 case GameManager.GameState.Pause:
                     menu.ShowMainMenu();

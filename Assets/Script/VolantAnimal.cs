@@ -7,17 +7,18 @@ using UnityEngine;
 public class VolantAnimal : MonoBehaviour
 {
     [SerializeField] private float flySpeed, force, gravity, rotateSmooth;
+    private float fixedFlySpeed;
     [SerializeField] private ParticleSystem hitEffect;
     private float balanceForce;
     [SerializeField] private AudioClip flySound, dieSound, scoreSound;
     private Quaternion downRotation = Quaternion.Euler(0, 0, -50), forwardRotation = Quaternion.Euler(0, 0, 40);
-    [SerializeField] private bool alive;
-    private int score;
+    [SerializeField] private bool isAlive;
 
     public static VolantAnimal Instance;
     private void Awake()
     {
         Instance = this;
+        fixedFlySpeed = flySpeed;
     }
     #region Properties
     public float FlySpeed
@@ -68,10 +69,9 @@ public class VolantAnimal : MonoBehaviour
     {
         get { return GetComponent<Animator>(); }
     }
-    public bool Alive
+    public bool IsAlive
     {
-        get { return alive; }
-        set { alive = value; }
+        get { return isAlive; }
     }
     public float BalanceForce
     {
@@ -81,11 +81,6 @@ public class VolantAnimal : MonoBehaviour
     public ParticleSystem HitEffect
     {
         get { return hitEffect; }
-    }
-    public int Score
-    {
-        get { return score; }
-        set { score = value; }
     }
     #endregion
     #region Behavior
@@ -116,6 +111,20 @@ public class VolantAnimal : MonoBehaviour
             hitEffect.Emit(1);
         AudioSource.PlayOneShot(dieSound);
         Animator.SetTrigger("Die");
+    }
+    public void Die()
+    {
+        isAlive = false;
+    }
+
+    public void Alive()
+    {
+        isAlive = true;
+    }
+
+    public void ResetSpeed()
+    {
+        flySpeed = fixedFlySpeed;
     }
 
     [System.Obsolete]

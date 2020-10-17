@@ -1,18 +1,21 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class CustomCollider : MonoBehaviour
+public abstract class CustomCollider : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    [SerializeField] protected CustomCollider target;
+    public CustomCollider Target { get => target; set => target = value; }
+    public virtual bool IsCollide()
+    { return false; }
 
-    // Update is called once per frame
-    void Update()
+    #region DrawCollider
+    protected virtual void OnDrawGizmos()
     {
-        
+        Gizmos.color = Color.green;
+        DrawCollider();
     }
+    protected virtual void DrawCollider()
+    {
+
+    }
+    #endregion
 }
