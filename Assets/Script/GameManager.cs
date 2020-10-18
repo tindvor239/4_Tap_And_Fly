@@ -10,6 +10,8 @@ public class GameManager : MonoBehaviour
     private ushort score;
     private ushort lastScore = 0;
     private Camera mainCamera;
+    private float loadMapDelay = 0.5f, loadMapTime = 0.5f;
+    private bool canLoadMap = false;
     public enum GameState { GameOver, Ready, Play, Pause };
     private GameState state;
     Paralax paralax;
@@ -53,7 +55,8 @@ public class GameManager : MonoBehaviour
         paralax.Following();
         paralax.ScrollingSteady();
         paralax.ScrollingFarAway();
-        switch(state)
+        loadMapTime -= Time.deltaTime;
+        switch (state)
         {
             case GameState.Ready:
                 if(Input.GetMouseButtonDown(0))
@@ -65,11 +68,17 @@ public class GameManager : MonoBehaviour
                 if (player != null)
                 {
                     spawner.Spawn();
+                    canLoadMap = false;
                     if (player.GetComponent<PlayerController>().Bird.IsAlive == false)
                         state = GameState.GameOver;
                 }
                 break;
             case GameState.GameOver:
+                if(canLoadMap == false)
+                {
+                    loadMapTime = loadMapDelay; //to make button delay for making any error.
+                    canLoadMap = true;
+                }
                 SetLastScore();
 
                 break;
@@ -91,13 +100,17 @@ public class GameManager : MonoBehaviour
     #region Button Behaviors
     public void LoadPlayMap()
     {
-        state = GameState.Ready;
-        player.transform.position = startPosition;
-        PlayerController controller = player.GetComponent<PlayerController>();
-        score = 0;
-        controller.Bird.Alive();
-        controller.Bird.ResetSpeed();
-        spawner.DeleteAllObstacles();
+        if(loadMapTime <= 0)
+        {
+            state = GameState.Ready;
+            player.transform.position = startPosition;
+            PlayerController controller = player.GetComponent<PlayerController>();
+            score = 0;
+            controller.Bird.Alive();
+            controller.Bird.ResetSpeed();
+            spawner.DeleteAllObstacles();
+            loadMapTime = loadMapDelay;
+        }
     }
     public void LoadMainMenu()
     {
