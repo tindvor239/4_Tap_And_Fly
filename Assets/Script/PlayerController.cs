@@ -5,6 +5,7 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] float pressDelayTime;
+    [SerializeField] CameraController camera;
     float currentPressDelayTime;
     sbyte dieCount = 0;
 
@@ -34,7 +35,8 @@ public class PlayerController : MonoBehaviour
             case GameManager.GameState.Play:
                 dieCount = 0;
                 bird.MoveForward();
-                PressToFly();
+                if(camera.IsTargetInView)
+                    PressToFly();
                 bird.HitEffect.enableEmission = true;
                 break;
             case GameManager.GameState.Ready:
@@ -58,7 +60,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    void PressToFly()
+    private void PressToFly()
     {
         currentPressDelayTime -= Time.deltaTime;
         if (currentPressDelayTime <= 0f)

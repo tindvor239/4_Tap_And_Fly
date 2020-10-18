@@ -94,6 +94,7 @@ public class GameManager : MonoBehaviour
         state = GameState.Ready;
         player.transform.position = startPosition;
         PlayerController controller = player.GetComponent<PlayerController>();
+        score = 0;
         controller.Bird.Alive();
         controller.Bird.ResetSpeed();
         spawner.DeleteAllObstacles();

@@ -16,14 +16,14 @@ public class GameOverUI : MonoBehaviour
     }
     #endregion
     #region Behavior
-    public void ShowGameOverUI(int score)
+    public void ShowGameOverUI(ushort score)
     {
         print(score);
         currentScore.text = score.ToString();
         SetHighScore(score);
         SetPlayerRank(score);
     }
-    void SetHighScore(int score)
+    void SetHighScore(ushort score)
     {
         int highScore = PlayerPrefs.GetInt("highScore");
         if (score >= highScore)
@@ -39,7 +39,7 @@ public class GameOverUI : MonoBehaviour
             newScore.SetActive(false);
         }
     }
-    void SetPlayerRank(int score)
+    void SetPlayerRank(ushort score)
     {
         if (score < 10)
         {

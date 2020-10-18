@@ -473,6 +473,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pressDelayTime: 0.4
+  camera: {fileID: 519420030}
 --- !u!82 &665628468
 AudioSource:
   m_ObjectHideFlags: 0
@@ -608,7 +609,7 @@ MonoBehaviour:
   flySound: {fileID: 8300000, guid: d9d88089ad7524578b2ea096abedc7c8, type: 3}
   dieSound: {fileID: 8300000, guid: ed249e373679d4a11adc0b58a4477f45, type: 3}
   scoreSound: {fileID: 8300000, guid: f2882c866e72c4440a6de6d9326f5a79, type: 3}
-  alive: 1
+  isAlive: 0
 --- !u!114 &665628472
 MonoBehaviour:
   m_ObjectHideFlags: 0

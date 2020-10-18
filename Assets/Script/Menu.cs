@@ -68,7 +68,7 @@ public class Menu : MonoBehaviour
         scoreUI.SetActive(true);
     }
 
-    public void SetScore(in int score)
+    public void SetScore(in ushort score)
     {
         scoreUI.GetComponentInChildren<Text>().text = score.ToString();
     }
